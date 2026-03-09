@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.service.AirQualityService;
 import com.example.backend.service.WeatherService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
