@@ -1,5 +1,7 @@
 package com.example.backend.dto;
 
+import java.util.List;
+
 public class AirQualityResultDto {
 
     private String cityName;
@@ -19,6 +21,8 @@ public class AirQualityResultDto {
     private String recordTime;
 
     private String recommendation;
+
+    private List<ForecastItem> pm25Forecast;
 
     // 新增环境数据
     private Double temperature;
@@ -142,4 +146,13 @@ public class AirQualityResultDto {
     public void setWindGust(Double windGust) {
         this.windGust = windGust;
     }
+
+    public List<ForecastItem> getPm25Forecast() {
+        return pm25Forecast;
+    }
+
+    public void setPm25Forecast(List<ForecastItem> pm25Forecast) {
+        this.pm25Forecast = pm25Forecast;
+    }
+
 }

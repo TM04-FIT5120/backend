@@ -8,6 +8,16 @@ public class AirQualityData {
     private Iaqi iaqi;
     private TimeInfo time;
 
+    private Forecast forecast;
+
+    public Forecast getForecast() {
+        return forecast;
+    }
+
+    public void setForecast(Forecast forecast) {
+        this.forecast = forecast;
+    }
+
     public Integer getAqi() {
         return aqi;
     }

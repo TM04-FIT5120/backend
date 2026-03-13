@@ -61,6 +61,14 @@ public class WeatherService {
             }
         }
 
+        if (response.getData().getForecast() != null &&
+                response.getData().getForecast().getDaily() != null) {
+
+            result.setPm25Forecast(
+                    response.getData().getForecast().getDaily().getPm25()
+            );
+        }
+
         if (response.getData().getTime() != null) {
             result.setRecordTime(response.getData().getTime().getIso());
         }
@@ -131,6 +139,14 @@ public class WeatherService {
             }
         }
 
+        if (response.getData().getForecast() != null &&
+                response.getData().getForecast().getDaily() != null) {
+
+            result.setPm25Forecast(
+                    response.getData().getForecast().getDaily().getPm25()
+            );
+        }
+
         if (response.getData().getTime() != null) {
             result.setRecordTime(response.getData().getTime().getIso());
         }
@@ -187,6 +203,14 @@ public class WeatherService {
             if (response.getData().getIaqi().getWg() != null) {
                 result.setWindGust(response.getData().getIaqi().getWg().getV());
             }
+        }
+
+        if (response.getData().getForecast() != null &&
+                response.getData().getForecast().getDaily() != null) {
+
+            result.setPm25Forecast(
+                    response.getData().getForecast().getDaily().getPm25()
+            );
         }
 
         if (response.getData().getTime() != null) {
