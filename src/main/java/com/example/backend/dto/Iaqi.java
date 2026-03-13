@@ -1,72 +1,46 @@
 package com.example.backend.dto;
 
+/**
+ * Individual Air Quality Indicators
+ * 空气质量和环境指标
+ */
 public class Iaqi {
-    private ValueWrapper co;
-    private ValueWrapper no2;
-    private ValueWrapper o3;
-    private ValueWrapper pm10;
-    private ValueWrapper pm25;
-    private ValueWrapper so2;
-    private ValueWrapper t;
+
+    /** Air Quality Index 空气质量指数 */
+    private ValueWrapper aqi;
+
+    /** Dew Point 露点温度 */
+    private ValueWrapper dew;
+
+    /** Humidity 湿度 (%) */
     private ValueWrapper h;
+
+    /** Pressure 气压 (hPa) */
     private ValueWrapper p;
+
+    /** Temperature 温度 (°C) */
+    private ValueWrapper t;
+
+    /** Wind Speed 风速 (m/s) */
     private ValueWrapper w;
-    private ValueWrapper wd;
 
-    public ValueWrapper getCo() {
-        return co;
+    /** Wind Gust 阵风速度 (m/s) */
+    private ValueWrapper wg;
+
+    public ValueWrapper getAqi() {
+        return aqi;
     }
 
-    public void setCo(ValueWrapper co) {
-        this.co = co;
+    public void setAqi(ValueWrapper aqi) {
+        this.aqi = aqi;
     }
 
-    public ValueWrapper getNo2() {
-        return no2;
+    public ValueWrapper getDew() {
+        return dew;
     }
 
-    public void setNo2(ValueWrapper no2) {
-        this.no2 = no2;
-    }
-
-    public ValueWrapper getO3() {
-        return o3;
-    }
-
-    public void setO3(ValueWrapper o3) {
-        this.o3 = o3;
-    }
-
-    public ValueWrapper getPm10() {
-        return pm10;
-    }
-
-    public void setPm10(ValueWrapper pm10) {
-        this.pm10 = pm10;
-    }
-
-    public ValueWrapper getPm25() {
-        return pm25;
-    }
-
-    public void setPm25(ValueWrapper pm25) {
-        this.pm25 = pm25;
-    }
-
-    public ValueWrapper getSo2() {
-        return so2;
-    }
-
-    public void setSo2(ValueWrapper so2) {
-        this.so2 = so2;
-    }
-
-    public ValueWrapper getT() {
-        return t;
-    }
-
-    public void setT(ValueWrapper t) {
-        this.t = t;
+    public void setDew(ValueWrapper dew) {
+        this.dew = dew;
     }
 
     public ValueWrapper getH() {
@@ -85,6 +59,14 @@ public class Iaqi {
         this.p = p;
     }
 
+    public ValueWrapper getT() {
+        return t;
+    }
+
+    public void setT(ValueWrapper t) {
+        this.t = t;
+    }
+
     public ValueWrapper getW() {
         return w;
     }
@@ -93,11 +75,11 @@ public class Iaqi {
         this.w = w;
     }
 
-    public ValueWrapper getWd() {
-        return wd;
+    public ValueWrapper getWg() {
+        return wg;
     }
 
-    public void setWd(ValueWrapper wd) {
-        this.wd = wd;
+    public void setWg(ValueWrapper wg) {
+        this.wg = wg;
     }
 }

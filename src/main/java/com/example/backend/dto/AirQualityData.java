@@ -1,9 +1,10 @@
 package com.example.backend.dto;
 
 public class AirQualityData {
+
     private Integer aqi;
-    private Integer idx;
     private City city;
+    private String dominentpol;
     private Iaqi iaqi;
     private TimeInfo time;
 
@@ -15,20 +16,20 @@ public class AirQualityData {
         this.aqi = aqi;
     }
 
-    public Integer getIdx() {
-        return idx;
-    }
-
-    public void setIdx(Integer idx) {
-        this.idx = idx;
-    }
-
     public City getCity() {
         return city;
     }
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    public String getDominentpol() {
+        return dominentpol;
+    }
+
+    public void setDominentpol(String dominentpol) {
+        this.dominentpol = dominentpol;
     }
 
     public Iaqi getIaqi() {
