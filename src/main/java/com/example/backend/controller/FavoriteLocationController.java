@@ -18,17 +18,17 @@ public class FavoriteLocationController {
         this.favoriteLocationService = favoriteLocationService;
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public String addFavorite(@RequestBody FavoriteLocationRequest request) {
         return favoriteLocationService.addFavorite(request);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public List<FavoriteLocation> getAllFavorites() {
         return favoriteLocationService.getAllFavorites();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteFavorite(@PathVariable Long id) {
         return favoriteLocationService.deleteFavorite(id);
     }
