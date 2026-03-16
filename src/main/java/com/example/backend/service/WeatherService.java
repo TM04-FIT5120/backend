@@ -2,21 +2,21 @@ package com.example.backend.service;
 
 import com.example.backend.dto.AirQualityResponse;
 import com.example.backend.dto.AirQualityResultDto;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
 public class WeatherService {
 
-    public String city;
-
-    public Double lat;
-    public Double lon;
-
-    public String API_URL =
-            "https://api.waqi.info/feed/geo:3.1390;101.6869/?token=93281fbcab41116ecfea291c83c8ec8b70a03a1b";
+    private static final String TOKEN   = "93281fbcab41116ecfea291c83c8ec8b70a03a1b";
+    private static final String API_URL = "https://api.waqi.info/feed/geo:3.1390;101.6869/?token=" + TOKEN;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public AirQualityResultDto getWeather() {
         RestTemplate restTemplate = new RestTemplate();
@@ -24,8 +24,8 @@ public class WeatherService {
         AirQualityResponse response =
                 restTemplate.getForObject(API_URL, AirQualityResponse.class);
 
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to get air quality data from API.");
+        if (response == null || !"ok".equals(response.getStatus()) || response.getData() == null) {
+            throw new RuntimeException("Failed to get default air quality data from API.");
         }
 
         AirQualityResultDto result = new AirQualityResultDto();
@@ -97,13 +97,39 @@ public class WeatherService {
     public AirQualityResultDto getByCity(String city) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url="https://api.waqi.info/feed/"+city+"/?token=93281fbcab41116ecfea291c83c8ec8b70a03a1b";
+        // 1. Try direct feed by city name
+        //    Wrapped in try-catch because AQICN returns {"data":"Unknown station"} for unrecognised
+        //    cities, which causes Jackson to throw MismatchedInputException during deserialisation.
+        String feedUrl = "https://api.waqi.info/feed/" + city + "/?token=" + TOKEN;
+        AirQualityResponse response = null;
+        try {
+            AirQualityResponse direct = restTemplate.getForObject(feedUrl, AirQualityResponse.class);
+            if (direct != null && "ok".equals(direct.getStatus()) && direct.getData() != null) {
+                response = direct;
+            }
+        } catch (Exception ignored) {
+            // Direct feed failed (e.g. "Unknown station") — fall through to search
+        }
 
-        AirQualityResponse response =
-                restTemplate.getForObject(url, AirQualityResponse.class);
+        // 2. If direct feed didn't return valid data, use the search API to resolve the station UID
+        if (response == null) {
+            try {
+                String searchUrl = "https://api.waqi.info/search/?keyword=" + city + "&token=" + TOKEN;
+                String searchJson = restTemplate.getForObject(searchUrl, String.class);
+                JsonNode root = objectMapper.readTree(searchJson);
 
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to get air quality data from API.");
+                if ("ok".equals(root.path("status").asText()) && root.path("data").isArray() && root.path("data").size() > 0) {
+                    int uid = root.path("data").get(0).path("uid").asInt();
+                    String uidUrl = "https://api.waqi.info/feed/@" + uid + "/?token=" + TOKEN;
+                    response = restTemplate.getForObject(uidUrl, AirQualityResponse.class);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("No air quality data found for city: " + city, e);
+            }
+        }
+
+        if (response == null || !"ok".equals(response.getStatus()) || response.getData() == null) {
+            throw new RuntimeException("No air quality data found for city: " + city);
         }
 
         AirQualityResultDto result = new AirQualityResultDto();
@@ -162,14 +188,14 @@ public class WeatherService {
         String Latitude = lat.toString();
         String Longitude = lon.toString();
 
-        String url = "https://api.waqi.info/feed/geo:" + Latitude + ";" + Longitude + "/?token=93281fbcab41116ecfea291c83c8ec8b70a03a1b";
+        String url = "https://api.waqi.info/feed/geo:" + Latitude + ";" + Longitude + "/?token=" + TOKEN;
 
 
         AirQualityResponse response =
                 restTemplate.getForObject(url, AirQualityResponse.class);
 
-        if (response == null || response.getData() == null) {
-            throw new RuntimeException("Failed to get air quality data from API.");
+        if (response == null || !"ok".equals(response.getStatus()) || response.getData() == null) {
+            throw new RuntimeException("Failed to get air quality data for coordinates.");
         }
 
         AirQualityResultDto result = new AirQualityResultDto();
