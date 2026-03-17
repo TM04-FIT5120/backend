@@ -49,4 +49,14 @@ public class AirQualityController {
         return airQualityForecastService.predictNext12MonthsForAllCities();
     }
 
+    @GetMapping("/version")
+    public java.util.Map<String, Object> version() {
+        java.util.Map<String, Object> out = new java.util.HashMap<>();
+        out.put("service", "backend");
+        out.put("controller", "AirQualityController");
+        out.put("timestampUtc", java.time.OffsetDateTime.now(java.time.ZoneOffset.UTC).toString());
+        out.put("hasPredictedAqiNext12Months", true);
+        return out;
+    }
+
 }
